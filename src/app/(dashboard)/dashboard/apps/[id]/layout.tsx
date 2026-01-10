@@ -1,0 +1,145 @@
+"use client";
+
+import { useEffect, useState, use } from 'react';
+import Link from 'next/link';
+import { useRouter, usePathname } from 'next/navigation';
+import { RiDeleteBin7Line } from 'react-icons/ri';
+import { BiSolidDashboard } from "react-icons/bi";
+import Header from '@/components/common/Header';
+import Logo from '@/components/common/Logo';
+import IconButton from '@/components/action/IconButton';
+import api from '@/lib/api/client';
+import { useToast } from '@/providers/ToastProvider';
+import type { App, Table } from '@/lib/types';
+import { cn } from '@/lib/helper';
+import ThemeToggle from '@/components/common/ThemeToggle';
+
+export default function ToolLayout({
+    children,
+    params
+}: {
+    children: React.ReactNode,
+    params: Promise<{ id: string }>
+}) {
+    const { id } = use(params);
+    const router = useRouter();
+    const pathname = usePathname();
+    const [tool, setTool] = useState<App | null>(null);
+    const [loading, setLoading] = useState(true);
+    const { success, error } = useToast();
+
+    useEffect(() => {
+        const fetchTool = async () => {
+            try {
+                const response = await api.get(`/tools/${id}/`);
+                setTool(response.data);
+            } catch (err) {
+                error('Failed to load tool');
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchTool();
+    }, [id, error]);
+
+    const handleAppDelete = async () => {
+        if (!confirm('Delete this app?')) return;
+        try {
+            await api.delete(`/tools/${id}/`);
+            success('App deleted');
+            router.push('/dashboard');
+        } catch (err) {
+            error('Failed to delete app');
+        }
+    };
+
+    if (loading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            </div>
+        );
+    }
+
+    if (!tool) return <div>Tool not found</div>;
+
+    // Determine current object ID from URL if present
+    // URL structure: /dashboard/apps/[id]/[objectId]/...
+    const pathParts = pathname.split('/');
+    const currentObjectId = pathParts.length > 4 ? pathParts[4] : (tool.app_objects[0]?.id.toString() || null);
+
+    const mainTabs = currentObjectId ? [
+        { name: 'Data', href: `/dashboard/apps/${id}/${currentObjectId}/data` },
+        { name: 'Form', href: `/dashboard/apps/${id}/${currentObjectId}/forms` },
+        { name: 'Object', href: `/dashboard/apps/${id}/${currentObjectId}/schema` },
+        { name: 'Docs', href: `/dashboard/apps/${id}/${currentObjectId}/docs` },
+    ] : [];
+
+    return (
+        <div className="min-h-screen flex flex-col">
+            <Header>
+                <div className="flex items-center space-x-2">
+                    <Link href="/dashboard">
+                        <Logo />
+                    </Link>
+                    <h1 className="font-bold">{tool.name}</h1>
+                </div>
+
+                <div className="flex space-x-6">
+                    {mainTabs.map((tab) => {
+                        const isActive = pathname.includes(tab.href);
+                        return (
+                            <Link
+                                key={tab.name}
+                                href={tab.href}
+                                className={cn(
+                                    "text-sm font-medium transition-colors border-b-2",
+                                    isActive ? "border-teal-800 dark:border-teal-500 text-teal-800 dark:text-teal-500" :
+                                        "border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-500 dark:hover:text-gray-300"
+                                )}
+                            >
+                                {tab.name}
+                            </Link>
+                        );
+                    })}
+                </div>
+
+                <div className="flex items-center space-x-2">
+                    <ThemeToggle />
+                    <IconButton title="Delete App" icon={RiDeleteBin7Line} onClick={handleAppDelete} />
+                    <IconButton title="Go to Dashboard" variant='invert' icon={BiSolidDashboard} onClick={() => router.push(`/dashboard`)} />
+                </div>
+            </Header>
+
+            <div className="bg-highlight border-b px-4 sm:px-6 lg:px-8">
+                <div className="flex space-x-4 overflow-x-auto pt-2">
+                    {tool.app_objects.map((table: Table) => {
+                        // Maintain the current view (data/forms/schema/docs) when switching tables
+                        const currentView = pathParts[5] || 'data';
+                        const href = `/dashboard/apps/${id}/${table.id}/${currentView}`;
+                        const isActive = currentObjectId === table.id.toString();
+
+                        return (
+                            <Link
+                                key={table.id}
+                                href={href}
+                                className={cn(
+                                    'px-4 py-2 text-sm font-medium border-b-2 transition-colors whitespace-nowrap',
+                                    isActive
+                                        ? 'border-teal-800 dark:border-teal-500 text-teal-800 dark:text-teal-500'
+                                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                                )}
+                            >
+                                {table.label}
+                            </Link>
+                        );
+                    })}
+                </div>
+            </div>
+
+            <main className="flex-1 overflow-hidden">
+                {children}
+            </main>
+        </div>
+    );
+}
