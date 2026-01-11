@@ -17,6 +17,7 @@ export interface FormResponse {
     };
     view: {
       id: number;
+      name?: string;
       type: string;
       config: {
         fields: string[];

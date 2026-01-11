@@ -59,12 +59,15 @@ function ObjectCard({ object }: { object: Table }) {
                 <div className="mt-6">
                     <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-2">Default Views</p>
                     <div className="flex flex-wrap gap-2">
-                        {object.views?.map(v => (
-                            <span key={v} className="flex items-center space-x-1 px-2 py-1 bg-teal-50 dark:bg-teal-900/20 text-teal-700 dark:text-teal-400 text-[10px] rounded-md border border-teal-100 dark:border-teal-900/30">
-                                <RiLayoutLine className="text-xs" />
-                                <span className="capitalize">{v}</span>
-                            </span>
-                        ))}
+                        {object.views?.map((v, idx) => {
+                            const viewType = typeof v === 'string' ? v : v.type;
+                            return (
+                                <span key={idx} className="flex items-center space-x-1 px-2 py-1 bg-teal-50 dark:bg-teal-900/20 text-teal-700 dark:text-teal-400 text-[10px] rounded-md border border-teal-100 dark:border-teal-900/30">
+                                    <RiLayoutLine className="text-xs" />
+                                    <span className="capitalize">{viewType}</span>
+                                </span>
+                            );
+                        })}
                     </div>
                 </div>
             </div>

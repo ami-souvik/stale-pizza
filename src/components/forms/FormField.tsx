@@ -1,6 +1,8 @@
 import type { DataType, Field as FieldType } from "@/lib/types";
 
 type FormFieldConfig = {
+    id?: string | number;
+    name?: string;
     label: string;
     type: DataType;
     required?: boolean;

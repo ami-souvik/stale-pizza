@@ -2,19 +2,22 @@ export default function Button({
     label,
     onClick,
     variant,
-    type = 'button'
+    type = 'button',
+    disabled = false
 }: {
     label: string,
     variant?: "default" | "invert",
-    onClick?: () => void
-    type?: 'button' | 'reset' | 'submit'
+    onClick?: () => void,
+    type?: 'button' | 'reset' | 'submit',
+    disabled?: boolean
 }) {
     const getClassName = () => {
+        const base = disabled ? "opacity-50 cursor-not-allowed " : "cursor-pointer ";
         switch (variant) {
             case "invert":
-                return "px-1 py-1 cursor-pointer rounded-lg text-xs whitespace-nowrap"
+                return base + "px-1 py-1 rounded-lg text-xs whitespace-nowrap"
             default:
-                return "bg-zinc-800 text-white px-3 py-1.5 cursor-pointer rounded-lg text-xs whitespace-nowrap hover:bg-zinc-700"
+                return base + "bg-zinc-800 text-white px-3 py-1.5 rounded-lg text-xs whitespace-nowrap hover:bg-zinc-700"
         }
     }
     return (
@@ -23,6 +26,7 @@ export default function Button({
             onClick={onClick}
             type={type}
             className={getClassName()}
+            disabled={disabled}
         >
             {label}
         </button>

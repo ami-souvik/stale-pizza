@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, use } from 'react';
+import { useEffect, useState, use, useCallback } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import { RiDeleteBin7Line, RiAddLine } from 'react-icons/ri';
@@ -31,19 +31,20 @@ export default function ToolLayout({
     const [isObjectModalOpen, setIsObjectModalOpen] = useState(false);
     const { success, error } = useToast();
 
-    useEffect(() => {
-        const fetchTool = async () => {
-            try {
-                const response = await api.get(`/tools/${id}/`);
-                setTool(response.data);
-            } catch {
-                error('Failed to load tool');
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchTool();
+    const fetchTool = useCallback(async () => {
+        try {
+            const response = await api.get(`/tools/${id}/`);
+            setTool(response.data);
+        } catch {
+            error('Failed to load tool');
+        } finally {
+            setLoading(false);
+        }
     }, [id, error]);
+
+    useEffect(() => {
+        fetchTool();
+    }, [fetchTool]);
 
     const handleAppDelete = async () => {
         if (!confirm('Delete this app?')) return;

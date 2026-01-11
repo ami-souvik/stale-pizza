@@ -46,7 +46,7 @@ export interface Table {
   label: string;
   name: string;
   fields: Field[];
-  views: View[];
+  views: (View | string)[];
   rules?: Rule[];
 }
 
