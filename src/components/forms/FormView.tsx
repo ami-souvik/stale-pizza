@@ -30,13 +30,8 @@ export default function FormView({ data, onSubmit }: Props) {
     return (
         <form
             onSubmit={handleSubmit}
-            className="space-y-6 rounded-lg p-6"
+            className="space-y-6 rounded-lg"
         >
-            {/* <h2 className="text-xl font-semibold">
-                {data.object.label}
-            </h2> */}
-            <h1 className="text-4xl font-semibold">Let's get in touch</h1>
-
             {data.fields.map((field) => (
                 <FormField
                     key={field.id}

@@ -26,7 +26,7 @@ function FormPageContent() {
         }
     }, [space, app, table, form]);
 
-    const handleSubmit = async (values: any) => {
+    const handleSubmit = async (values: Record<string, any>) => {
         if (!space || !app || !table || !form) return;
         
         api.post(`/guest/${space}/apps/${app}/tables/${table}/forms/${form}/`, {
