@@ -12,9 +12,33 @@ export interface Field {
   fields?: Field[]; // For repeating groups
   auto_generated?: boolean;
   auto_calculated?: boolean;
+  is_primary?: boolean;
+  is_stage?: boolean;
   locally_created?: boolean;
   defaultValue?: string;
   validations?: Record<string, any>;
+}
+
+export interface Rule {
+    id: number;
+    name: string;
+    trigger_type: string;
+    trigger_config: Record<string, any>;
+    actions: Record<string, any>[];
+    is_active: boolean;
+    created_at: string;
+}
+
+export interface View {
+    id: number;
+    name: string;
+    slug: string;
+    type: 'form' | 'list' | 'kanban' | 'timeline';
+    config: Record<string, any>;
+    is_default: boolean;
+    is_public: boolean;
+    created_at: string;
+    updated_at: string;
 }
 
 export interface Table {
@@ -22,8 +46,8 @@ export interface Table {
   label: string;
   name: string;
   fields: Field[];
-  views?: string[];
-  rules?: Record<string, any>;
+  views: View[];
+  rules?: Rule[];
 }
 
 export interface ToolSchema {

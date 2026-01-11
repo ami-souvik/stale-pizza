@@ -12,9 +12,9 @@ export default function Button({
     const getClassName = () => {
         switch (variant) {
             case "invert":
-                return "px-1 py-1 cursor-pointer rounded-lg text-xs"
+                return "px-1 py-1 cursor-pointer rounded-lg text-xs whitespace-nowrap"
             default:
-                return "bg-zinc-800 text-white text-xs px-3 py-1.5 cursor-pointer rounded-lg hover:bg-zinc-700"
+                return "bg-zinc-800 text-white px-3 py-1.5 cursor-pointer rounded-lg text-xs whitespace-nowrap hover:bg-zinc-700"
         }
     }
     return (

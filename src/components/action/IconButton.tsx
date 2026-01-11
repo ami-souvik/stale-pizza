@@ -12,7 +12,7 @@ export default function IconButton({
     const getClassName = () => {
         switch (variant) {
             case "invert":
-                return "px-1 py-1 cursor-pointer rounded-lg text-zinc-800 text-lg"
+                return "px-1 py-1 cursor-pointer rounded-lg text-lg"
             default:
                 return "px-1.5 py-1.5 cursor-pointer rounded-lg text-white bg-zinc-800"
         }
