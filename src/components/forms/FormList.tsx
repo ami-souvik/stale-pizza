@@ -173,31 +173,31 @@ export default function FormList({ appId, objectId }: FormListProps) {
                                     )}
                                 </div>
 
-                                                                {view.is_public && view.slug && (
-                                                                    <div className="flex items-center justify-between bg-gray-50 dark:bg-zinc-950 p-2 rounded-lg border border-gray-100 dark:border-zinc-800">
-                                                                        <span className="text-[10px] text-gray-500 font-mono truncate mr-2">
-                                                                            .../p/{view.slug}
-                                                                        </span>
-                                                                        <div className="flex items-center space-x-1">
-                                                                            <button 
-                                                                                onClick={() => copyToClipboard(`${window.location.origin}/p/${view.slug}/`)}
-                                                                                className="p-1 hover:bg-gray-200 dark:hover:bg-zinc-800 rounded transition-colors text-gray-400 hover:text-teal-600"
-                                                                                title="Copy public link"
-                                                                            >
-                                                                                <RiFileCopyLine size={14} />
-                                                                            </button>
-                                                                            <a 
-                                                                                href={`/p/${view.slug}/`} 
-                                                                                target="_blank" 
-                                                                                rel="noopener noreferrer"
-                                                                                className="p-1 hover:bg-gray-200 dark:hover:bg-zinc-800 rounded transition-colors text-gray-400 hover:text-teal-600"
-                                                                                title="Open public form"
-                                                                            >
-                                                                                <RiExternalLinkLine size={14} />
-                                                                            </a>
-                                                                        </div>
-                                                                    </div>
-                                                                )}                            </div>
+                                {view.is_public && view.slug && (
+                                    <div className="flex items-center justify-between bg-gray-50 dark:bg-zinc-950 p-2 rounded-lg border border-gray-100 dark:border-zinc-800">
+                                        <span className="text-xs text-gray-500 font-mono truncate mr-2">
+                                            .../p/{view.slug}
+                                        </span>
+                                        <div className="flex items-center space-x-1">
+                                            <button
+                                                onClick={() => copyToClipboard(`${window.location.origin}/p/${view.slug}/`)}
+                                                className="p-1 hover:bg-gray-200 dark:hover:bg-zinc-800 rounded transition-colors text-gray-400 hover:text-teal-600"
+                                                title="Copy public link"
+                                            >
+                                                <RiFileCopyLine size={14} />
+                                            </button>
+                                            <a
+                                                href={`/p/${view.slug}/`}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="p-1 hover:bg-gray-200 dark:hover:bg-zinc-800 rounded transition-colors text-gray-400 hover:text-teal-600"
+                                                title="Open public form"
+                                            >
+                                                <RiExternalLinkLine size={14} />
+                                            </a>
+                                        </div>
+                                    </div>
+                                )}                            </div>
 
                             <div className="mt-6 flex items-center justify-between">
                                 <Link

@@ -340,25 +340,27 @@ export default function FormBuilder({ object: initObject, viewId }: { object: { 
     }
 
     return (
-        <div ref={scrollableRef} className="h-full flex flex-col">
-            <div className="bg-highlight border-b px-6 py-3 flex justify-between items-center shadow-sm z-10">
+        <div ref={scrollableRef} className="h-full flex flex-col overflow-hidden">
+            <div className="bg-highlight border-b px-4 sm:px-6 py-3 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 shadow-sm z-10">
                 <div>
-                    <h1 className="text-lg font-semibold">Form Layout</h1>
-                    <p className="text-xs text-fg-secondary">Drag fields from the sidebar to build your form</p>
+                    <h1 className="text-base sm:text-lg font-semibold">Form Layout</h1>
+                    <p className="text-[10px] sm:text-xs text-fg-secondary">Drag fields from the sidebar to build your form</p>
                 </div>
-                <Button label="Save Form" onClick={handleSave} />
+                <div className="flex w-full sm:w-auto justify-end">
+                    <Button label="Save Form" onClick={handleSave} />
+                </div>
             </div>
 
-            <div className="flex-1 overflow-hidden grid grid-cols-[300px_1fr_300px]">
+            <div className="flex-1 overflow-hidden flex flex-col lg:grid lg:grid-cols-[280px_1fr_300px]">
                 {/* Left Sidebar: Available Fields */}
-                <div className="border-r overflow-y-auto p-4">
-                    <h3 className="font-semibold text-sm mb-4">Available Fields</h3>
-                    <div className="space-y-3">
+                <div className="order-2 lg:order-1 border-t lg:border-t-0 lg:border-r overflow-y-auto p-4 bg-white dark:bg-zinc-900 lg:bg-transparent h-64 lg:h-full">
+                    <h3 className="font-semibold text-xs sm:text-sm mb-4 uppercase tracking-wider text-gray-400">Available Fields</h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3">
                         {availableFields.map(field => (
                             <SidebarField key={field.id} field={field} />
                         ))}
                         {availableFields.length === 0 && (
-                            <p className="text-sm text-gray-400 text-center py-8">
+                            <p className="text-sm text-gray-400 text-center py-8 col-span-full">
                                 All fields are used in the form.
                             </p>
                         )}
@@ -366,17 +368,17 @@ export default function FormBuilder({ object: initObject, viewId }: { object: { 
                 </div>
 
                 {/* Canvas */}
-                <div className="overflow-y-auto p-8 relative">
+                <div className="order-1 lg:order-2 overflow-y-auto p-4 sm:p-8 relative bg-gray-50 dark:bg-zinc-950 flex-1">
                     <div
                         ref={mainRef}
-                        className="max-w-2xl mx-auto bg-highlight rounded-xl shadow-sm min-h-[400px] p-8 border relative"
+                        className="max-w-2xl mx-auto bg-white dark:bg-zinc-900 rounded-xl shadow-sm min-h-[300px] sm:min-h-[400px] p-4 sm:p-8 border relative"
                     >
                         {dropIndicator && <SharedDropIndicator offset={mainRefRect.top} indicator={dropIndicator} />}
 
                         {formFields.length === 0 && (
-                            <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-400 pointer-events-none">
+                            <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-400 pointer-events-none p-4 text-center">
                                 <p className="text-lg font-medium">Empty Form</p>
-                                <p className="text-sm">Drag fields here to start</p>
+                                <p className="text-sm text-gray-500">Drag fields here to start building your intake form</p>
                             </div>
                         )}
 
@@ -410,8 +412,8 @@ export default function FormBuilder({ object: initObject, viewId }: { object: { 
                 </div>
 
                 {/* Right Sidebar: Field Properties */}
-                <div className="border-l overflow-y-auto p-4">
-                    <h3 className="font-semibold text-sm mb-4">Properties</h3>
+                <div className="order-3 lg:order-3 border-t lg:border-t-0 lg:border-l overflow-y-auto p-4 bg-white dark:bg-zinc-900 lg:bg-transparent min-h-[200px] lg:h-full">
+                    <h3 className="font-semibold text-xs sm:text-sm mb-4 uppercase tracking-wider text-gray-400">Properties</h3>
                     {selectedField ? (
                         <div className="space-y-4">
                             <FormField
@@ -436,16 +438,12 @@ export default function FormBuilder({ object: initObject, viewId }: { object: { 
                                 field={{ label: 'Required', type: 'checkbox', required: false }}
                                 value={selectedField.required}
                                 onChange={(val) => {
-                                    // Note: Changing 'required' here only affects the form view validation if we implemented that.
-                                    // The schema validation on Save checks the *original* schema requirements.
-                                    // A user shouldn't be able to make a required schema field optional in the form, 
-                                    // but they could make an optional schema field required in the form.
                                     setFormFields(prev => prev.map(f =>
                                         f.id === selectedField.id ? { ...f, required: val as boolean } : f
                                     ));
                                 }}
                             />
-                            <div className="pt-4 border-t">
+                            <div className="pt-4 border-t dark:border-zinc-800">
                                 <Button
                                     label="Remove from Form"
                                     variant="invert"
@@ -457,7 +455,9 @@ export default function FormBuilder({ object: initObject, viewId }: { object: { 
                             </div>
                         </div>
                     ) : (
-                        <p className="text-sm text-gray-400">Select a field on the canvas to edit properties.</p>
+                        <div className="flex flex-col items-center justify-center h-32 text-center border-2 border-dashed border-gray-100 dark:border-zinc-800 rounded-xl">
+                            <p className="text-xs text-gray-400 px-4">Select a field on the canvas to edit its properties</p>
+                        </div>
                     )}
                 </div>
             </div>

@@ -3,7 +3,15 @@
 import { useEffect, useState, use, useCallback } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
-import { RiDeleteBin7Line, RiAddLine } from 'react-icons/ri';
+import { 
+    RiDeleteBin7Line, 
+    RiAddLine, 
+    RiTableLine, 
+    RiFileAddLine, 
+    RiFlashlightLine, 
+    RiLayoutLine, 
+    RiBookOpenLine 
+} from 'react-icons/ri';
 import { BiSolidDashboard } from "react-icons/bi";
 import Header from '@/components/common/Header';
 import Logo from '@/components/common/Logo';
@@ -73,24 +81,24 @@ export default function ToolLayout({
     const currentObjectId = pathParts.length > 4 ? pathParts[4] : (tool.app_objects[0]?.id.toString() || null);
 
     const mainTabs = currentObjectId ? [
-        { name: 'Data', href: `/dashboard/apps/${id}/${currentObjectId}/data` },
-        { name: 'Form', href: `/dashboard/apps/${id}/${currentObjectId}/forms` },
-        { name: 'Automations', href: `/dashboard/apps/${id}/${currentObjectId}/automations` },
-        { name: 'Object', href: `/dashboard/apps/${id}/${currentObjectId}/schema` },
-        { name: 'Docs', href: `/dashboard/apps/${id}/${currentObjectId}/docs` },
+        { name: 'Data', href: `/dashboard/apps/${id}/${currentObjectId}/data`, icon: RiTableLine },
+        { name: 'Form', href: `/dashboard/apps/${id}/${currentObjectId}/forms`, icon: RiFileAddLine },
+        { name: 'Automations', href: `/dashboard/apps/${id}/${currentObjectId}/automations`, icon: RiFlashlightLine },
+        { name: 'Object', href: `/dashboard/apps/${id}/${currentObjectId}/schema`, icon: RiLayoutLine },
+        { name: 'Docs', href: `/dashboard/apps/${id}/${currentObjectId}/docs`, icon: RiBookOpenLine },
     ] : [];
 
     return (
-        <div className="min-h-screen flex flex-col">
+        <div className="min-h-screen flex flex-col pb-16 sm:pb-0">
             <Header>
                 <div className="flex items-center space-x-2">
                     <Link href="/dashboard">
                         <Logo className="h-4 text-teal-700" />
                     </Link>
-                    <h1 className="font-bold">{tool.name}</h1>
+                    <h1 className="font-bold text-sm sm:text-base truncate max-w-[100px] sm:max-w-none">{tool.name}</h1>
                 </div>
 
-                <div className="flex space-x-6">
+                <div className="hidden sm:flex space-x-6">
                     {mainTabs.map((tab) => {
                         const isActive = pathname.includes(tab.href);
                         return (
@@ -109,14 +117,14 @@ export default function ToolLayout({
                     })}
                 </div>
 
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-1 sm:space-x-2">
                     <ThemeToggle />
-                    <IconButton title="Delete App" icon={RiDeleteBin7Line} onClick={handleAppDelete} />
+                    <IconButton title="Delete App" icon={RiDeleteBin7Line} onClick={handleAppDelete} className="hidden sm:flex" />
                     <IconButton title="Go to Dashboard" variant='invert' icon={BiSolidDashboard} onClick={() => router.push(`/dashboard`)} />
                 </div>
             </Header>
 
-            <div className="bg-highlight border-b px-4 sm:px-6 lg:px-8">
+            <div className="hidden sm:block bg-highlight border-b px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center space-x-4">
                     <div className="flex space-x-4 overflow-x-auto pt-2">
                         {tool.app_objects.map((table: Table) => {
@@ -143,13 +151,34 @@ export default function ToolLayout({
                     </div>
                     <button
                         onClick={() => setIsObjectModalOpen(true)}
-                        className="px-4 py-2 text-gray-400 hover:text-teal-600 hover:bg-teal-50 dark:hover:bg-teal-900/20 transition-all"
+                        className="p-1 mb-1 rounded-full text-gray-400 hover:text-teal-600 hover:bg-teal-50 dark:hover:bg-teal-900/20 transition-all"
                         title="Add Object"
                     >
                         <RiAddLine size={20} />
                     </button>
                 </div>
             </div>
+
+            {/* Mobile Bottom Navigation */}
+            <nav className="sm:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-zinc-900 border-t border-gray-200 dark:border-zinc-800 z-50 flex justify-around items-center h-16 px-2">
+                {mainTabs.map((tab) => {
+                    const isActive = pathname.includes(tab.href);
+                    const Icon = tab.icon;
+                    return (
+                        <Link
+                            key={tab.name}
+                            href={tab.href}
+                            className={cn(
+                                "flex flex-col items-center justify-center flex-1 h-full space-y-1 transition-colors",
+                                isActive ? "text-teal-600 dark:text-teal-400" : "text-gray-400"
+                            )}
+                        >
+                            <Icon size={20} />
+                            <span className="text-[10px] font-medium">{tab.name}</span>
+                        </Link>
+                    );
+                })}
+            </nav>
 
             <main className="flex-1 overflow-hidden">
                 {children}
