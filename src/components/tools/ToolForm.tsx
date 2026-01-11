@@ -39,8 +39,7 @@ export default function ToolForm(
                         />
                     </div>
                 ))}
-                <div className="flex space-x-4">
-                    <Button label={editing ? 'Update Record' : 'Create Record'} type="submit" />
+                <div className="flex justify-end space-x-4">
                     <Button
                         label="Cancel"
                         variant="invert"
@@ -56,6 +55,7 @@ export default function ToolForm(
                             handleClose();
                         }}
                     />
+                    <Button label={editing ? 'Update Record' : 'Create Record'} type="submit" />
                 </div>
             </form>
         </div>

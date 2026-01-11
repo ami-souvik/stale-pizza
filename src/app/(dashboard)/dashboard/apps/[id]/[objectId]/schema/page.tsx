@@ -31,7 +31,7 @@ export default function SchemaPage({ params }: { params: Promise<{ id: string, o
     if (!object) return <div className="p-10 text-center">Object not found</div>;
 
     return (
-        <div className="h-full bg-gray-50">
+        <div className="h-full">
             <SchemaEditor object={{ appId: id, id: object.id, fields: object.fields }} />
         </div>
     );

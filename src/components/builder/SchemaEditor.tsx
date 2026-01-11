@@ -1,10 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { type Field, type Table } from "../../lib/types";
+import { type Field } from "../../lib/types";
 import { datatypes, createFieldFromDatatype, type DataType } from "../layout/data";
 import Button from "../action/Button";
-import IconButton from "../action/IconButton";
 import { IoSettingsSharp } from "react-icons/io5";
 import { RiDeleteBin7Line } from "react-icons/ri";
 import FormField from "../forms/FormField";
@@ -55,20 +54,20 @@ export default function SchemaEditor({ object: initObject }: { object: { appId: 
     };
 
     return (
-        <div className="flex h-full bg-white">
+        <div className="flex h-full">
             <div className="flex-1 flex flex-col">
-                <div className="p-4 border-b flex justify-between items-center bg-gray-50">
+                <div className="p-4 border-b flex justify-between items-center">
                     <div className="relative">
                         <Button
                             label="+ Add Field"
                             onClick={() => setIsAddingField(!isAddingField)}
                         />
                         {isAddingField && (
-                            <div className="absolute top-10 left-0 bg-white shadow-xl rounded-lg p-2 w-48 border z-10 grid grid-cols-1 gap-1">
+                            <div className="absolute top-10 left-0 bg-highlight shadow-xl rounded-lg p-2 w-48 border z-10 grid grid-cols-1 gap-1">
                                 {datatypes.map(dt => (
                                     <button
                                         key={dt.type}
-                                        className="text-left px-3 py-2 hover:bg-gray-100 rounded text-sm flex items-center space-x-2"
+                                        className="cursor-pointer text-left px-3 py-2 hover:bg-gray-100/5 rounded text-sm flex items-center space-x-2"
                                         onClick={() => handleAddField(dt.type)}
                                     >
                                         <dt.icon />
@@ -83,29 +82,29 @@ export default function SchemaEditor({ object: initObject }: { object: { appId: 
 
                 <div className="flex-1 overflow-auto p-6">
                     <div className="border rounded-lg overflow-hidden">
-                        <table className="min-w-full divide-y divide-gray-200">
-                            <thead className="bg-gray-50">
+                        <table className="min-w-full divide-y">
+                            <thead className="bg-highlight">
                                 <tr>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Field Name</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Required</th>
-                                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Field Name</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Type</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Required</th>
+                                    <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-gray-200">
+                            <tbody className="divide-y">
                                 {fields.map((field) => (
                                     <tr
                                         key={field.id}
-                                        className={`hover:bg-gray-50 cursor-pointer ${selectedField?.id === field.id ? 'bg-blue-50' : ''}`}
+                                        className={`hover:bg-gray-100/2 cursor-pointer ${selectedField?.id === field.id ? 'bg-highlight' : ''}`}
                                         onClick={() => setSelectedField(field)}
                                     >
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             {field.label}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 flex items-center space-x-2">
-                                            <span className="bg-gray-100 px-2 py-1 rounded text-xs">{field.type}</span>
+                                            <span className="bg-zinc-800 dark:bg-zinc-200 px-2 py-1 rounded text-xs text-zinc-200 dark:text-zinc-800">{field.type}</span>
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm">
                                             {field.required ? 'Yes' : 'No'}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -132,7 +131,7 @@ export default function SchemaEditor({ object: initObject }: { object: { appId: 
             </div>
 
             {selectedField && (
-                <div className="w-80 border-l bg-gray-50 p-4 overflow-y-auto">
+                <div className="w-80 border-l p-4 overflow-y-auto">
                     <h3 className="font-medium text-lg mb-4 flex items-center space-x-2">
                         <IoSettingsSharp />
                         <span>Field Settings</span>

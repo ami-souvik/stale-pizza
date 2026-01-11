@@ -177,7 +177,7 @@ export default function DataGrid({
     }
 
     return (
-        <div className="rounded-lg shadow-sm border h-full flex flex-col bg-highlight">
+        <div className="shadow-sm h-full flex flex-col bg-highlight">
             {showForm && <ToolForm
                 fields={object?.fields || []}
                 editing={!!editingRecord}
@@ -234,9 +234,9 @@ export default function DataGrid({
                             </tr>
                         ) : (
                             sortedRecords.map((record) => (
-                                <tr key={record.id} className="hover:bg-teal-400/5">
+                                <tr key={record.id} className="hover:bg-gray-100/2">
                                     {object?.fields.map((field: any) => (
-                                        <td key={field.name} className="px-6 py-4 whitespace-nowrap text-sm border-r border-transparent hover:border-(--color-stroke)">
+                                        <td key={field.name} className="px-6 py-4 whitespace-nowrap text-sm border-r border-transparent">
                                             {record.data[field.name]?.toString() || '-'}
                                         </td>
                                     ))}

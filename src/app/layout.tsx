@@ -36,11 +36,11 @@ export default function RootLayout({
         className={`${archivo.className} antialiased`}
       >
         <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
           <ToastProvider>
             <AuthProvider>
               {children}
